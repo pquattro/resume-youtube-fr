@@ -86,3 +86,7 @@ lib/summarize.js   prompts et stratégie map-reduce
 lib/markdown.js    rendu Markdown minimal
 icons/             icônes 16/48/128
 ```
+
+## Licence
+
+MIT — voir [LICENSE](LICENSE).
