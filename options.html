@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Options — Résumé YouTube</title>
+  <link rel="stylesheet" href="sidepanel.css">
+  <style>
+    body { padding: 28px; max-width: 620px; margin: 0 auto; display: block; }
+    h1 { font-size: 20px; margin: 0 0 4px; }
+    .sub { color: var(--muted); margin: 0 0 24px; font-size: 13px; }
+    .row { margin-bottom: 20px; }
+    label.lbl { display: block; font-weight: 600; margin-bottom: 4px; font-size: 13px; }
+    .desc { color: var(--muted); font-size: 12px; margin-bottom: 7px; }
+    input[type=password], input[type=text], select {
+      width: 100%; padding: 9px 11px; border-radius: 8px;
+      border: 1px solid var(--line); background: var(--card); color: var(--fg); font-size: 13px;
+    }
+    .inline { display: flex; gap: 8px; align-items: center; }
+    .note { background: var(--card); border-left: 3px solid var(--accent); padding: 11px 13px; border-radius: 8px; font-size: 12.5px; color: var(--muted); }
+    .saved { color: var(--accent); font-size: 12.5px; margin-left: 10px; }
+    a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <h1>Résumé YouTube (FR)</h1>
+  <p class="sub">Résumés de vidéos YouTube en français, via l'API Mistral.</p>
+
+  <div class="row">
+    <label class="lbl" for="apiKey">Clé API Mistral</label>
+    <div class="desc">À créer sur <a href="https://console.mistral.ai/api-keys" target="_blank" rel="noopener">console.mistral.ai/api-keys</a>.</div>
+    <div class="inline">
+      <input type="password" id="apiKey" placeholder="••••••••••••••••••••" autocomplete="off" spellcheck="false">
+      <button class="ghost" id="toggleKey" type="button">Afficher</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <label class="lbl" for="model">Modèle</label>
+    <div class="desc">« Large » donne les meilleurs résumés ; « Small » coûte nettement moins cher.</div>
+    <select id="model">
+      <option value="mistral-large-latest">mistral-large-latest — qualité maximale</option>
+      <option value="mistral-medium-latest">mistral-medium-latest — bon compromis</option>
+      <option value="mistral-small-latest">mistral-small-latest — rapide et économique</option>
+      <option value="open-mistral-nemo">open-mistral-nemo — très économique</option>
+      <option value="__custom">Autre (saisir l'identifiant)…</option>
+    </select>
+    <input type="text" id="customModel" placeholder="identifiant exact du modèle" style="margin-top:8px" hidden>
+  </div>
+
+  <div class="row">
+    <label class="lbl" for="style">Format de résumé par défaut</label>
+    <select id="style">
+      <option value="court">Court — l'essentiel en 5 à 7 puces</option>
+      <option value="standard">Standard — synthèse + points clés + déroulé</option>
+      <option value="detaille">Détaillé — compte rendu complet section par section</option>
+    </select>
+  </div>
+
+  <div class="row inline">
+    <button class="primary" id="save" type="button">Enregistrer</button>
+    <span class="saved" id="saved" hidden>Enregistré ✓</span>
+    <span class="grow"></span>
+    <button class="ghost" id="clearCache" type="button">Vider le cache des résumés</button>
+  </div>
+
+  <p class="note">
+    Votre clé est stockée uniquement sur cet ordinateur (<code>chrome.storage.local</code>), elle n'est pas synchronisée
+    et n'est transmise qu'à <code>api.mistral.ai</code>. La transcription de la vidéo est envoyée à Mistral pour être
+    résumée : ne l'utilisez pas sur des vidéos confidentielles sans vérifier les conditions d'usage de votre compte.
+  </p>
+
+  <script src="options.js"></script>
+</body>
+</html>

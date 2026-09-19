@@ -1,0 +1,43 @@
+#!/bin/sh
+# Refuse le commit si une clé API semble avoir été écrite en dur.
+# Contourner volontairement : git commit --no-verify
+
+found=0
+files=$(git diff --cached --name-only --diff-filter=ACM)
+[ -z "$files" ] && exit 0
+
+for f in $files; do
+  case "$f" in
+    .githooks/*|*.md) continue ;;
+  esac
+  [ -f "$f" ] || continue
+
+  # 1) apiKey / api_key / token / secret affecté à une valeur non vide littérale
+  if git show ":$f" | grep -nEi "(api[_-]?key|token|secret|password)[\"']?\s*[:=]\s*[\"'][A-Za-z0-9_-]{16,}[\"']" >/dev/null; then
+    echo "✖ $f : affectation d'une clé/secret en dur"
+    git show ":$f" | grep -nEi "(api[_-]?key|token|secret|password)[\"']?\s*[:=]\s*[\"'][A-Za-z0-9_-]{16,}[\"']" | head -3
+    found=1
+  fi
+
+  # 2) Bearer suivi d'une valeur littérale (et non d'une interpolation ${...})
+  if git show ":$f" | grep -nE "Bearer[[:space:]]+[A-Za-z0-9_-]{16,}" >/dev/null; then
+    echo "✖ $f : jeton Bearer littéral"
+    found=1
+  fi
+
+  # 3) chaîne isolée de 32+ caractères alphanumériques (format d'une clé Mistral)
+  if git show ":$f" | grep -nE "[\"'][A-Za-z0-9]{32,}[\"']" >/dev/null; then
+    echo "✖ $f : chaîne de 32+ caractères alphanumériques (clé API ?)"
+    git show ":$f" | grep -nE "[\"'][A-Za-z0-9]{32,}[\"']" | head -3
+    found=1
+  fi
+done
+
+if [ "$found" = 1 ]; then
+  echo ""
+  echo "Commit interrompu : un secret semble présent dans les fichiers indexés."
+  echo "La clé API Mistral doit rester dans chrome.storage.local, jamais dans le code."
+  echo "Si c'est un faux positif : git commit --no-verify"
+  exit 1
+fi
+exit 0

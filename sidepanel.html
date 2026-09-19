@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Résumé YouTube</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <header class="bar">
+    <div class="video">
+      <div class="video-title" id="videoTitle">Aucune vidéo détectée</div>
+      <div class="video-meta" id="videoMeta">Ouvrez une vidéo YouTube dans cet onglet.</div>
+    </div>
+    <button class="icon-btn" id="settingsBtn" title="Options" aria-label="Options">⚙</button>
+  </header>
+
+  <section class="controls">
+    <label class="field">
+      <span>Format</span>
+      <select id="style">
+        <option value="court">Court</option>
+        <option value="standard" selected>Standard</option>
+        <option value="detaille">Détaillé</option>
+      </select>
+    </label>
+    <button class="primary" id="runBtn" disabled>Résumer</button>
+  </section>
+
+  <div class="status" id="status" hidden></div>
+
+  <main id="output" class="output"></main>
+
+  <footer class="footer" id="footer" hidden>
+    <button class="ghost" id="copyBtn">Copier</button>
+    <button class="ghost" id="redoBtn">Regénérer</button>
+    <span class="grow"></span>
+    <span class="hint" id="footerHint"></span>
+  </footer>
+
+  <script type="module" src="sidepanel.js"></script>
+</body>
+</html>

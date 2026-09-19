@@ -1,0 +1,21 @@
+# --- Secrets : rien de tout cela ne doit partir sur git ---
+.env
+.env.*
+*.key
+*.pem
+secrets.json
+config.local.js
+config.local.json
+
+# --- Artefacts de build / packaging ---
+*.zip
+*.crx
+*.pem.bak
+dist/
+build/
+
+# --- Divers ---
+.DS_Store
+node_modules/
+__check.html
+__preview.html
