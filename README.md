@@ -24,8 +24,8 @@ de la vidéo au moment correspondant. Le résumé est mis en cache par vidéo ; 
 
 | Étape | Où | Détail |
 |---|---|---|
-| Transcription | `lib/transcript.js` | Récupère la page `watch`, en extrait `ytInitialPlayerResponse`, choisit la piste de sous-titres (français manuel > français auto > manuel > première disponible) et télécharge le `timedtext` en JSON (repli XML). |
-| Repli | `content.js` | Si aucune piste n'est exploitable, l'extension ouvre le panneau « Transcription » de YouTube et en lit les segments. |
+| Transcription | `content.js` | Ouvre le panneau « Transcription » de la page et en lit les segments (`transcript-segment-view-model`). C'est la route principale depuis la v1.1.0. |
+| Repli | `lib/transcript.js` | Récupère la page `watch`, en extrait `ytInitialPlayerResponse` et télécharge la piste `timedtext`. Cette route renvoie un corps vide depuis septembre 2026 ; elle est conservée au cas où elle redevienne exploitable. |
 | Résumé | `lib/summarize.js` | Vidéo courte : un seul appel en streaming. Vidéo longue (> 60 000 caractères) : découpage en tranches de 40 000, notes intermédiaires, puis synthèse finale (map-reduce). |
 | Rendu | `lib/markdown.js` | Mini-rendu Markdown sans dépendance (compatible CSP MV3), avec transformation des horodatages en liens de navigation. |
 
@@ -69,8 +69,19 @@ coûte davantage mais produit des synthèses nettement plus fidèles.
 - Une vidéo **sans aucun sous-titre** (ni manuel ni automatique) ne peut pas être résumée : il n'y a rien à lire.
 - Les **directs** en cours n'exposent pas de transcription complète.
 - Les vidéos privées ou soumises à une vérification d'âge peuvent bloquer la récupération.
-- Si YouTube modifie la structure de sa page, le repli DOM (`content.js`) est le point le plus susceptible
-  de casser : les sélecteurs `ytd-transcript-segment-renderer` y sont centralisés.
+- **L'onglet YouTube doit rester ouvert et chargé** : l'extension lit le panneau de la page, elle ne
+  peut pas récupérer la transcription d'une vidéo en arrière-plan.
+- **Point de rupture principal** : les sélecteurs DOM de `content.js`. YouTube les a déjà renommés une
+  fois (`ytd-transcript-segment-renderer` → `transcript-segment-view-model`, septembre 2026) ; les deux
+  générations sont désormais gérées, mais un nouveau renommage casserait l'extraction.
+
+## Historique
+
+- **1.1.0** — YouTube a fermé la route `timedtext` (corps vide, jeton de provenance requis) et renommé
+  les éléments du panneau transcription. Lecture du panneau DOM passée en route principale, sélecteurs
+  mis à jour avec repli sur l'ancienne interface, ciblage du bouton restreint aux vrais `<button>`
+  (un lien de la description était cliqué par erreur et ouvrait un onglet).
+- **1.0.0** — Version initiale.
 
 ## Structure
 

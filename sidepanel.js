@@ -108,7 +108,7 @@ async function run() {
 
     if (!data.segments.length) {
       setStatus(
-        "Impossible de récupérer une transcription pour cette vidéo. Causes possibles : les sous-titres sont désactivés par l'auteur, la vidéo est privée ou en direct. Vérifiez qu'une transcription existe (menu « … » sous la vidéo → « Afficher la transcription »), rechargez la page, puis réessayez.",
+        "Transcription introuvable. L'extension lit le panneau « Transcription » de la page : vérifiez qu'il existe pour cette vidéo (déroulez la description, bouton « Afficher la transcription »). S'il est là, rechargez la page (Cmd+R) puis réessayez — le panneau doit être chargé. Sinon, la vidéo n'a tout simplement pas de sous-titres.",
         true
       );
       return;
