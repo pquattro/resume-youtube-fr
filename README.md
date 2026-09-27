@@ -77,16 +77,14 @@ coûte davantage mais produit des synthèses nettement plus fidèles.
 
 ## Historique
 
-- **1.1.0** — YouTube a fermé la route `timedtext` (corps vide, jeton de provenance requis) et renommé
-  les éléments du panneau transcription. Lecture du panneau DOM passée en route principale, sélecteurs
-  mis à jour avec repli sur l'ancienne interface, ciblage du bouton restreint aux vrais `<button>`
-  (un lien de la description était cliqué par erreur et ouvrait un onglet).
-- **1.0.0** — Version initiale.
+Voir [CHANGELOG.md](CHANGELOG.md).
 
 ## Structure
 
 ```
 manifest.json      déclaration MV3
+CHANGELOG.md       historique des versions
+LICENSE            licence MIT
 background.js      ouverture du panneau latéral
 content.js         repli transcription + navigation dans la vidéo
 sidepanel.html/css/js   interface du panneau
